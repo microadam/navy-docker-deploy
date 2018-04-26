@@ -1,6 +1,6 @@
 {
   "name": "navy-docker-deploy",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Currently very much work in progress and has no unit tests.",
   "main": "index.js",
   "scripts": {
