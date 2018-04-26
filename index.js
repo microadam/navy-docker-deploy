@@ -34,6 +34,7 @@ module.exports = function deploy(orderConfig) {
     // TODO: Time stamp injected into repo (env vars) for instrumentation of startup time
 
     data.services = context.appData.services
+    data.envVars = context.appData.env
     // data.services = [ { name: 'site', port: '5000', cmd: [ '/usr/local/bin/serve', '-nt', '/app' ] } ]
     // data.envVars = [ { MONGO_URL: 'mongodb://10.0.3.182:27017/lei-site-development' } ]
     // data.services = [
