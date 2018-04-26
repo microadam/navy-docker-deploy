@@ -37,12 +37,12 @@ module.exports = function deploy(orderConfig) {
     // data.services = [ { name: 'site', port: '5000', cmd: [ '/usr/local/bin/serve', '-nt', '/app' ] } ]
     // data.envVars = [ { MONGO_URL: 'mongodb://10.0.3.182:27017/lei-site-development' } ]
     // data.services = [
-    //   { name: 'site', port: '7366', cmd: [ '/usr/local/bin/node', '/app/dist/site/app.js' ] },
-    //   { name: 'admin', port: '7367', cmd: [ '/usr/local/bin/node', '/app/admin/app.js' ] },
-    //   { name: 'api', port: '7368', cmd: [ '/usr/local/bin/node', '/app/dist/api/app.js' ] },
-    //   { name: 'message-bus', port: '7369', cmd: [ '/usr/local/bin/node', '/app/message-bus/app.js' ] },
-    //   { name: 'realtime', port: '7371', cmd: [ '/usr/local/bin/node', '/app/dist/realtime/app.js' ] },
-    //   { name: 'worker', port: '7370', cmd: [ '/usr/local/bin/node', '/app/dist/worker/app.js' ] }
+    //   { name: 'site', cmd: [ '/usr/local/bin/node', '/app/dist/site/app.js' ] },
+    //   { name: 'admin', cmd: [ '/usr/local/bin/node', '/app/admin/app.js' ] },
+    //   { name: 'api', cmd: [ '/usr/local/bin/node', '/app/dist/api/app.js' ] },
+    //   { name: 'message-bus', cmd: [ '/usr/local/bin/node', '/app/message-bus/app.js' ] },
+    //   { name: 'realtime', cmd: [ '/usr/local/bin/node', '/app/dist/realtime/app.js' ] },
+    //   { name: 'worker', cmd: [ '/usr/local/bin/node', '/app/dist/worker/app.js' ] }
     // ]
 
     data.environment = environment
