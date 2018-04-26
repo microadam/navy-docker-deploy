@@ -1,36 +1,16 @@
 var Docker = require('dockerode')
-  , Etcd = require('node-etcd')
-  , publicIp = process.env.PUBLIC_IP || '172.16.42.43'
   , createPullRepo = require('./lib/pull-repo')
   , createGetOldContainerDetails = require('./lib/get-old-container-details')
-  , createStartNewContainer = require('./lib/start-new-container')
-  , createWaitForNewContainer = require('./lib/wait-for-new-container')
-  , createAddNewContainerToProxy = require('./lib/add-new-container-to-proxy')
-  , createRemoveOldContainersFromProxy = require('./lib/remove-old-containers-from-proxy')
-  , wait = require('./lib/wait')
-  , createStopOldContainers = require('./lib/stop-old-containers')
-  , getServicesWithPublicPorts = require('./lib/get-services-with-public-ports')
+  , createReplaceContainers = require('./lib/replace-containers')
 
 module.exports = function deploy(orderConfig) {
 
-  var dockerHost = orderConfig.docker.host
-    , dockerPort = orderConfig.docker.port
-    , docker = new Docker({ host: 'http://' + dockerHost, port: dockerPort })
-    , etcdHost = orderConfig.etcd.host
-    , etcdPort = orderConfig.etcd.port
-    , etcd = new Etcd(etcdHost, etcdPort)
+  var docker = new Docker({ socketPath: '/var/run/docker.sock' })
     , steps =
       { init: init
-      , pullRepo: createPullRepo(docker, orderConfig.dockerRegistry)
-      , getOldContainerDetails: createGetOldContainerDetails(docker, getServicesWithPublicPorts)
-      // , createNewContainer
-      // , generateUpstartScripts
-      , startNewContainer: createStartNewContainer(docker, orderConfig.dockerRegistry, getServicesWithPublicPorts)
-      , waitForNewContainer: createWaitForNewContainer(publicIp)
-      , addNewContainerToProxy: createAddNewContainerToProxy(publicIp, etcd)
-      , removeOldContainersFromProxy: createRemoveOldContainersFromProxy(publicIp, etcd)
-      , waitFour: wait(4)
-      , stopOldContainers: createStopOldContainers(docker)
+      , pullRepo: createPullRepo(docker, orderConfig.dockerRegistry, orderConfig.dockerAuth)
+      , getOldContainerDetails: createGetOldContainerDetails(docker)
+      , replaceContainers: createReplaceContainers(docker)
       }
 
   function getSteps() {
@@ -38,18 +18,32 @@ module.exports = function deploy(orderConfig) {
   }
 
   function getStepList() {
-    return Object.keys(steps)
+    return [
+      'init'
+    , 'pullRepo'
+    , 'getOldContainerDetails'
+    , { name: 'replaceContainers', parallel: false, delay: 30 }
+    ]
   }
 
   function init(context, callback) {
     var data = {}
-      , environment = context.orderArgs[0]
-      , appVersion = context.orderArgs[1]
+      , appVersion = context.orderArgs[0]
+      , environment = context.environment
 
-    //TODO: get environment specfic services, volumes etc
-    // at this point appData will contain details of all environments
-    data.volumes = context.appData.volumes
+    // TODO: Time stamp injected into repo (env vars) for instrumentation of startup time
+
     data.services = context.appData.services
+    // data.services = [ { name: 'site', port: '5000', cmd: [ '/usr/local/bin/serve', '-nt', '/app' ] } ]
+    // data.envVars = [ { MONGO_URL: 'mongodb://10.0.3.182:27017/lei-site-development' } ]
+    // data.services = [
+    //   { name: 'site', port: '7366', cmd: [ '/usr/local/bin/node', '/app/dist/site/app.js' ] },
+    //   { name: 'admin', port: '7367', cmd: [ '/usr/local/bin/node', '/app/admin/app.js' ] },
+    //   { name: 'api', port: '7368', cmd: [ '/usr/local/bin/node', '/app/dist/api/app.js' ] },
+    //   { name: 'message-bus', port: '7369', cmd: [ '/usr/local/bin/node', '/app/message-bus/app.js' ] },
+    //   { name: 'realtime', port: '7371', cmd: [ '/usr/local/bin/node', '/app/dist/realtime/app.js' ] },
+    //   { name: 'worker', port: '7370', cmd: [ '/usr/local/bin/node', '/app/dist/worker/app.js' ] }
+    // ]
 
     data.environment = environment
     data.appVersion = appVersion

@@ -1,0 +1,19 @@
+{
+  "name": "navy-docker-deploy",
+  "version": "1.0.0",
+  "description": "Currently very much work in progress and has no unit tests.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microadam/navy-docker-deploy.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/microadam/navy-docker-deploy/issues"
+  },
+  "homepage": "https://github.com/microadam/navy-docker-deploy#readme"
+}
