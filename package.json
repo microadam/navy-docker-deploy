@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/microadam/navy-docker-deploy/issues"
   },
-  "homepage": "https://github.com/microadam/navy-docker-deploy#readme"
+  "homepage": "https://github.com/microadam/navy-docker-deploy#readme",
+  "dependencies": {
+    "dockerode": "^2.5.5"
+  }
 }
