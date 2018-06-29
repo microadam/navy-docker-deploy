@@ -22,7 +22,7 @@ module.exports = function deploy(orderConfig) {
       'init'
     , 'pullRepo'
     , 'getOldContainerDetails'
-    , { name: 'replaceContainers', parallel: false, delay: 30 }
+    , { name: 'replaceContainers', parallel: false, delay: 0 }
     ]
   }
 
@@ -31,12 +31,10 @@ module.exports = function deploy(orderConfig) {
       , appVersion = context.orderArgs[0]
       , environment = context.environment
 
-    // TODO: Time stamp injected into repo (env vars) for instrumentation of startup time
-
     data.services = context.appData.services
     data.envVars = context.appData.env
     // data.services = [ { name: 'site', port: '5000', cmd: [ '/usr/local/bin/serve', '-nt', '/app' ] } ]
-    // data.envVars = [ { MONGO_URL: 'mongodb://10.0.3.182:27017/lei-site-development' } ]
+    // data.envVars = [ { MONGO_URL: 'mongodb://192.168.0.252:27017/lei-site-development' } ]
     // data.services = [
     //   { name: 'site', cmd: [ '/usr/local/bin/node', '/app/dist/site/app.js' ] },
     //   { name: 'admin', cmd: [ '/usr/local/bin/node', '/app/admin/app.js' ] },
